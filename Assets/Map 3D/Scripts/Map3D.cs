@@ -10,18 +10,23 @@ namespace Map3d {
         int chunkCountX, chunkCountZ;
         public int chunkSize;
 
+        public Gradient coloring;
+
         public Chunk chunkPrefab;
+        public float amplitude;
 
         Chunk[] chunks;
 
         public float scale = 1;
-        public int seed;
+        public int seed = 0;
+        [Range(1, 10)]
         public int octaves;
         [Range(0, 1)]
         public float persistance;
         public float lacunarity;
-        [Range(1, 255)]
+        [Range(1, 254)]
         public int resolution = 249;
+        public float zoom = 1f;
 
         private void Awake() {
             InitMetrics();
@@ -30,11 +35,16 @@ namespace Map3d {
         }
 
         void InitMetrics() {
+            MapMetrics.seed = seed;
             MapMetrics.scale = scale;
             MapMetrics.octaves = octaves;
             MapMetrics.lacunarity = lacunarity;
             MapMetrics.persistance = persistance;
             MapMetrics.chunkResolution = resolution;
+            MapMetrics.coloring = coloring;
+            MapMetrics.zoom = zoom;
+
+            MapMetrics.amplitude = amplitude;
         }
 
         public void CreateMap() {
@@ -64,9 +74,9 @@ namespace Map3d {
             if (octaves < 0) {
                 octaves = 0;
             }
-            if (resolution % 2 == 0) {
-                resolution += 1;
-            }
+            //if (resolution % 2 == 0) {
+            //    resolution += 1;
+            //}
             InitMetrics();
             Refresh();
         }

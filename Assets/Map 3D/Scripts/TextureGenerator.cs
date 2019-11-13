@@ -15,14 +15,19 @@ namespace Map3d {
             return texture;
         }
 
-        public static Texture2D TextureFromHeightMap(float[,] heightMap) {
+        public static Texture2D TextureFromHeightMap(float[,] heightMap, Gradient coloring = null) {
             int width = heightMap.GetLength(0);
             int height = heightMap.GetLength(1);
 
             Color[] colourMap = new Color[width * height];
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    colourMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+                    if (coloring == null) {
+                        colourMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+                    }
+                    else {
+                        colourMap[y * width + x] = coloring.Evaluate(heightMap[x, y]);
+                    }
                 }
             }
             return TextureFromColourMap(colourMap, width, height);

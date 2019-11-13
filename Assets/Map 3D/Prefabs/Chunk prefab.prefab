@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6816c41051e4c0448a01f2bd013183c3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 7280618900660167520}
   - component: {fileID: 8475157048574382912}
   - component: {fileID: 427096053640706407}
-  - component: {fileID: 670169861719138058}
+  - component: {fileID: 8109840845206325479}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -170,7 +170,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &670169861719138058
+--- !u!114 &8109840845206325479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7090972333798117477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38dfeb4a1dcb7e141aa05db6c4ae1b02, type: 3}
+  m_Script: {fileID: 11500000, guid: b42abbb287989ae4493f6c6674dc3734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 1
@@ -232,7 +232,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseRender: {fileID: 7179250407820315736}
-  terrain: {fileID: 670169861719138058}
-  textures:
-  - {fileID: 2800000, guid: 3c26505b22774c7429c0c37688b3cdd0, type: 3}
-  - {fileID: 2800000, guid: 91949191fbde79a4aab58f101ecfb9f9, type: 3}
+  terrain: {fileID: 8109840845206325479}
+  position: {x: 0, y: 0}

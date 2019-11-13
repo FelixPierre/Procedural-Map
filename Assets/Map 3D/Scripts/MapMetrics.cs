@@ -4,15 +4,16 @@ using UnityEngine;
 
 namespace Map3d {
 
-    public class Metrics {
-        // Start is called before the first frame update
-        void Start() {
+    public static class MapMetrics {
+        public static int seed = 0;
+        public static float scale = 1;
+        public static int octaves = 5;
+        public static float persistance = 0.5f;
+        public static float lacunarity = 1f;
+        public static int chunkResolution = 249;
+        public static float zoom = 1f;
+        public static Gradient coloring;
 
-        }
-
-        // Update is called once per frame
-        void Update() {
-
-        }
+        public static float amplitude = 5f;
     }
 }

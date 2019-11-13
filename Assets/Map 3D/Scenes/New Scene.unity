@@ -330,5 +330,155 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: chunkSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: zoom
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: resolution
+      value: 149
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key1.r
+      value: 0.35294116
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key1.g
+      value: 0.74858403
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key2.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key2.g
+      value: 0.879291
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key2.b
+      value: 0.033018887
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key3.g
+      value: 0.7891069
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key3.b
+      value: 0.09803921
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key4.r
+      value: 0.023502609
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key4.g
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key4.b
+      value: 0.013216423
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key5.r
+      value: 0.006800152
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key5.g
+      value: 0.6698113
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key6.r
+      value: 0.6037736
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key6.g
+      value: 0.5279232
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key6.b
+      value: 0.41295835
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key7.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key7.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.key7.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime1
+      value: 27371
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime2
+      value: 31997
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime3
+      value: 35081
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime4
+      value: 38936
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime5
+      value: 55512
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime6
+      value: 61680
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.ctime7
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: coloring.m_NumColorKeys
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6855006673213346291, guid: 28741742e3e0a6849bed40cadebe5aa1,
+        type: 3}
+      propertyPath: amplitude
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28741742e3e0a6849bed40cadebe5aa1, type: 3}
