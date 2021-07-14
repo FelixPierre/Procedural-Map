@@ -32,5 +32,27 @@ namespace Map3d {
             }
             return TextureFromColourMap(colourMap, width, height);
         }
+
+        public static Texture2D TextureFromLevels(float[,] map, ColoredLevel[] levels) {
+            int width = map.GetLength(0);
+            int height = map.GetLength(1);
+
+            Color[] colourMap = new Color[width * height];
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    colourMap[y * width + x] = levels[GetLevel(map[x, y], levels)].color;
+                }
+            }
+            return TextureFromColourMap(colourMap, width, height);
+        }
+
+        private static int GetLevel(float value, ColoredLevel[] levels) {
+            for (int i = 0; i < levels.Length; i++) {
+                if (value <= levels[i].level) {
+                    return i;
+                }
+            }
+            return levels.Length - 1;
+        }
     }
 }

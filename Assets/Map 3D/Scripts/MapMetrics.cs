@@ -12,8 +12,12 @@ namespace Map3d {
         public static float lacunarity = 1f;
         public static int chunkResolution = 249;
         public static float zoom = 1f;
-        public static Gradient coloring;
+        public static Gradient heightGradient;
+        public static Gradient temperatureGradient;
+        public static Gradient moistureGradient;
 
         public static float amplitude = 5f;
+
+        public static BiomeGraph biomeGraph = null;
     }
 }
