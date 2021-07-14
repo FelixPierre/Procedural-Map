@@ -6,11 +6,13 @@ namespace Map3d {
 
     public class Map3D : MonoBehaviour {
 
-        public int mapSizeX, mapSizeZ;
-        int chunkCountX, chunkCountZ;
+        //int mapSizeX, mapSizeZ;
+        public int chunkCountX, chunkCountZ;
         public int chunkSize;
 
-        public Gradient coloring;
+        public Gradient height;
+        public Gradient temperature;
+        public Gradient moisture;
 
         public Chunk chunkPrefab;
         public float amplitude;
@@ -41,15 +43,19 @@ namespace Map3d {
             MapMetrics.lacunarity = lacunarity;
             MapMetrics.persistance = persistance;
             MapMetrics.chunkResolution = resolution;
-            MapMetrics.coloring = coloring;
+            MapMetrics.heightGradient = height;
+            MapMetrics.temperatureGradient = temperature;
+            MapMetrics.moistureGradient = moisture;
             MapMetrics.zoom = zoom;
 
             MapMetrics.amplitude = amplitude;
         }
 
         public void CreateMap() {
-            chunkCountX = mapSizeX / chunkSize;
-            chunkCountZ = mapSizeZ / chunkSize;
+            //mapSizeX = chunkCountX * chunkSize;
+            //mapSizeZ = chunkCountZ * chunkSize;
+            //chunkCountX = mapSizeX / chunkSize;
+            //chunkCountZ = mapSizeZ / chunkSize;
 
             CreateChunks();
         }
