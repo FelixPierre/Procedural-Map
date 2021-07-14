@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace HexMap {
@@ -59,6 +60,12 @@ namespace HexMap {
             return new HexCoordinates(iX, iZ);
         }
 
+        public int DistanceTo(HexCoordinates other) {
+            return ((x < other.x ? other.x - x : x - other.x) +
+                (Y < other.Y ? other.Y - Y : Y - other.Y) +
+                (z < other.z ? other.z - z : z - other.z)) / 2;
+        }
+
 
         public override string ToString() {
             return "(" + X + ", " + Y + ", " + Z + ")";
@@ -67,6 +74,18 @@ namespace HexMap {
 
         public string ToStringOnSeparateLines() {
             return X + "\n" + Y + "\n" + Z;
+        }
+
+        public void Save(BinaryWriter writer) {
+            writer.Write(x);
+            writer.Write(z);
+        }
+
+        public static HexCoordinates Load (BinaryReader reader) { // A load method does'nt make sense in a struct
+            HexCoordinates c;
+            c.x = reader.ReadInt32();
+            c.z = reader.ReadInt32();
+            return c;
         }
     }
 

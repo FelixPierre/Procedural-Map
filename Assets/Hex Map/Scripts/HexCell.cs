@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HexMap {
 
@@ -36,6 +37,8 @@ namespace HexMap {
 
         int specialIndex;
 
+        int distance;
+
         #endregion
 
         #region Properties
@@ -61,12 +64,6 @@ namespace HexMap {
                 }
 
                 Refresh();
-            }
-        }
-
-        public Color Color {
-            get {
-                return HexMetrics.colors[terrainTypeIndex];
             }
         }
 
@@ -250,6 +247,35 @@ namespace HexMap {
             }
         }
 
+        #region Path
+
+        public int Distance {
+            get {
+                return distance;
+            }
+            set {
+                distance = value;
+            }
+        }
+
+        public HexCell PathFrom { get; set; }
+
+        public int SearchHeuristic { get; set; }
+
+        public int SearchPriority {
+            get {
+                return distance + SearchHeuristic;
+            }
+        }
+
+        public HexCell NextWithSamePriority { get; set; }
+
+        public int SearchPhase { get; set; }
+
+        #endregion
+
+        public HexUnit Unit { get; set; }
+
         #endregion
 
         #region Useful Methods
@@ -285,11 +311,17 @@ namespace HexMap {
                         neighbor.chunk.Refresh();
                     }
                 }
+                if (Unit) {
+                    Unit.ValidateLocation();
+                }
             }
         }
 
         void RefreshSelfOnly() {
             chunk.Refresh();
+            if (Unit) {
+                Unit.ValidateLocation();
+            }
         }
 
         #endregion
@@ -478,6 +510,26 @@ namespace HexMap {
             for (int i = 0; i < roads.Length; i++) {
                 roads[i] = (roadFlags & (1 << i)) != 0; // 1<<i is 2^i
             }
+        }
+
+        #region Path
+
+        public void DisableHighlight() {
+            Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+            highlight.enabled = false;
+        }
+
+        public void EnableHighlight(Color color) {
+            Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+            highlight.color = color;
+            highlight.enabled = true;
+        }
+
+        #endregion
+
+        public void SetLabel(string text) {
+            Text label = uiRect.GetComponent<Text>();
+            label.text = text;
         }
     }
 

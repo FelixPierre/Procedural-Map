@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HexMap {
 
-    public class NewMapMenu : MonoBehaviour {
+    public class HexMapMenu : MonoBehaviour {
 
         public HexGrid hexGrid;
 

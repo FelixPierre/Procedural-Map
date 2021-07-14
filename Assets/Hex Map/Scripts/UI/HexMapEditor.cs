@@ -17,6 +17,10 @@ namespace HexMap {
         int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
         bool applyUrbanLevel = true, applyFarmLevel = true, applyPlantLevel = true, applySpecialIndex = true;
 
+        public Material terrainMaterial;
+
+        //bool editMode;
+
         int brushSize;
 
         enum OptionalToggle { Ignore, Yes, No }
@@ -24,34 +28,90 @@ namespace HexMap {
 
         bool isDrag;
         HexDirection dragDirection;
+        //HexCell previousCell, searchFromCell, searchToCell;
         HexCell previousCell;
 
+        void Awake() {
+            terrainMaterial.DisableKeyword("GRID_ON"); // Disable the grid by default
+            SetEditMode(false);
+        }
+
         void Update() {
-            if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject()) {
-                HandleInput();
-            }
-            else {
-                previousCell = null;
+            if (!EventSystem.current.IsPointerOverGameObject()) {
+                if (Input.GetMouseButton(0)) {
+                    HandleInput();
+                    return;
+                }
+                if (Input.GetKeyDown(KeyCode.U)) {
+                    if (Input.GetKey(KeyCode.LeftShift)) {
+                        DestroyUnit();
+                    }
+                    else {
+                        CreateUnit();
+                    }
+                    return;
+                }
             }
         }
 
+        HexCell GetCellUnderCursor() {
+            return hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+        }
+
         void HandleInput() {
-            Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(inputRay, out RaycastHit hit)) {
-                HexCell currentCell = hexGrid.GetCell(hit.point);
+            HexCell currentCell = GetCellUnderCursor();
+            if (currentCell) {
                 if (previousCell && previousCell != currentCell) {
                     ValidateDrag(currentCell);
                 }
                 else {
                     isDrag = false;
                 }
+                //if (editMode) {
                 EditCells(currentCell);
+                //}
+                //else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell) {
+                //    if (searchFromCell != currentCell) {
+                //        if (searchFromCell) {
+                //            searchFromCell.DisableHighlight();
+                //        }
+                //        searchFromCell = currentCell;
+                //        searchFromCell.EnableHighlight(Color.blue);
+                //        if (searchToCell) {
+                //            hexGrid.FindPath(searchFromCell, searchToCell, 24);
+                //        }
+                //    }
+                //}
+                //else if (searchFromCell && searchFromCell != currentCell) {
+                //    if (searchToCell != currentCell) {
+                //        searchToCell = currentCell;
+                //        hexGrid.FindPath(searchFromCell, searchToCell, 24);
+                //    }
+                //}
                 previousCell = currentCell;
             }
             else {
                 previousCell = null;
             }
         }
+
+        #region Unit
+
+        void CreateUnit() {
+            HexCell cell = GetCellUnderCursor();
+            if (cell && !cell.Unit) {
+                hexGrid.AddUnit(Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
+            }
+        }
+
+        void DestroyUnit() {
+            HexCell cell = GetCellUnderCursor();
+            if (cell && cell.Unit) {
+                hexGrid.RemoveUnit(cell.Unit);
+            }
+        }
+
+        #endregion
 
         void EditCells(HexCell center) {
             int centerX = center.coordinates.X;
@@ -141,10 +201,6 @@ namespace HexMap {
             brushSize = (int)size;
         }
 
-        public void ShowUI(bool visible) {
-            hexGrid.ShowUI(visible);
-        }
-
         public void SetRiverMode(int mode) {
             riverMode = (OptionalToggle)mode;
         }
@@ -195,6 +251,21 @@ namespace HexMap {
 
         public void SetSpecialIndex(float index) {
             activeSpecialIndex = (int)index;
+        }
+
+        public void ShowGrid(bool visible) {
+            if (visible) {
+                terrainMaterial.EnableKeyword("GRID_ON");
+            }
+            else {
+                terrainMaterial.DisableKeyword("GRID_ON");
+            }
+        }
+
+        public void SetEditMode(bool toggle) {
+            //editMode = toggle;
+            //hexGrid.ShowUI(!toggle);
+            enabled = toggle;
         }
     }
 

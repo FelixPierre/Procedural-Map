@@ -11,12 +11,14 @@ namespace HexMap {
         Mesh hexMesh;
         MeshCollider meshCollider;
         public bool useCollider, useColors, useUVCoordinates, useUV2Coordinates;
+        public bool useTerrainTypes;
 
         [NonSerialized] List<Vector3> vertices = new List<Vector3>();
         [NonSerialized] List<int> triangles = new List<int>();
         [NonSerialized] List<Color> colors = new List<Color>();
         [NonSerialized] List<Vector2> uvs = new List<Vector2>();
         [NonSerialized] List<Vector2> uv2s = new List<Vector2>();
+        [NonSerialized] List<Vector3> terrainTypes = new List<Vector3>();
 
         void Awake() {
             GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
@@ -76,6 +78,12 @@ namespace HexMap {
             uv2s.Add(uv1);
             uv2s.Add(uv2);
             uv2s.Add(uv3);
+        }
+
+        public void AddTriangleTerrainTypes(Vector3 types) {
+            terrainTypes.Add(types);
+            terrainTypes.Add(types);
+            terrainTypes.Add(types);
         }
 
         #endregion
@@ -166,6 +174,13 @@ namespace HexMap {
             uv2s.Add(new Vector2(uMax, vMax));
         }
 
+        public void AddQuadTerrainTypes(Vector3 types) {
+            terrainTypes.Add(types);
+            terrainTypes.Add(types);
+            terrainTypes.Add(types);
+            terrainTypes.Add(types);
+        }
+
         #endregion
 
         // Clear datas
@@ -181,6 +196,9 @@ namespace HexMap {
             }
             if (useUV2Coordinates) {
                 uv2s = ListPool<Vector2>.Get();
+            }
+            if (useTerrainTypes) {
+                terrainTypes = ListPool<Vector3>.Get();
             }
         }
 
@@ -201,6 +219,10 @@ namespace HexMap {
             if (useUV2Coordinates) {
                 hexMesh.SetUVs(1, uv2s);
                 ListPool<Vector2>.Add(uv2s);
+            }
+            if (useTerrainTypes) {
+                hexMesh.SetUVs(2, terrainTypes);
+                ListPool<Vector3>.Add(terrainTypes);
             }
             hexMesh.RecalculateNormals();
             if (useCollider) {

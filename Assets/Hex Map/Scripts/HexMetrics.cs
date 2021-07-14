@@ -6,8 +6,6 @@ namespace HexMap {
 
     public static class HexMetrics {
 
-        public static Color[] colors;
-
         #region Shape
 
         public const float outerRadius = 10f;

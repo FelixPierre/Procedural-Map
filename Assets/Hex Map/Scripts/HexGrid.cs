@@ -22,12 +22,24 @@ namespace HexMap {
 
         public int seed;
 
-        public Color[] colors;
+        HexCellPriorityQueue searchFrontier;
+        int searchFrontierPhase;
+        HexCell currentPathFrom, currentPathTo;
+        bool currentPathExists;
+
+        List<HexUnit> units = new List<HexUnit>();
+        public HexUnit UnitPrefab;
+
+        public bool HasPath {
+            get {
+                return currentPathExists;
+            }
+        }
 
         void Awake() {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
-            HexMetrics.colors = colors;
+            HexUnit.unitPrefab = UnitPrefab;
             CreateMap(cellCountX, cellCountZ);
         }
 
@@ -36,6 +48,8 @@ namespace HexMap {
                 Debug.LogError("Unsupported map size.");
                 return false;
             }
+            ClearPath();
+            ClearUnits();
             if (chunks != null) {
                 for (int i = 0; i < chunks.Length; i++) {
                     Destroy(chunks[i].gameObject);
@@ -55,7 +69,7 @@ namespace HexMap {
             if (!noiseSource) {
                 HexMetrics.noiseSource = noiseSource;
                 HexMetrics.InitializeHashGrid(seed);
-                HexMetrics.colors = colors;
+                HexUnit.unitPrefab = UnitPrefab;
             }
         }
 
@@ -120,7 +134,7 @@ namespace HexMap {
             Text label = Instantiate<Text>(cellLabelPrefab);
             //label.rectTransform.SetParent(gridCanvas.transform, false);
             label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-            label.text = cell.coordinates.ToStringOnSeparateLines();
+            //label.text = cell.coordinates.ToStringOnSeparateLines();
             cell.uiRect = label.rectTransform;
             cell.Elevation = 0; // make sure that the perturbation is applied immediately
 
@@ -156,6 +170,14 @@ namespace HexMap {
             return cells[x + z * cellCountX];
         }
 
+        public HexCell GetCell(Ray ray) {
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                return GetCell(hit.point);
+            }
+            return null;
+        }
+
         public void ShowUI(bool visible) {
             for (int i = 0; i < chunks.Length; i++) {
                 chunks[i].ShowUI(visible);
@@ -169,9 +191,16 @@ namespace HexMap {
             for (int i = 0; i < cells.Length; i++) {
                 cells[i].Save(writer);
             }
+
+            writer.Write(units.Count);
+            for (int i = 0; i < units.Count; i++) {
+                units[i].Save(writer);
+            }
         }
 
         public void Load(BinaryReader reader, int header) {
+            ClearPath();
+            ClearUnits();
             int x = 30, z = 25;
             if (header >= 1) {
                 x = reader.ReadInt32();
@@ -189,7 +218,155 @@ namespace HexMap {
             for (int i = 0; i < chunks.Length; i++) {
                 chunks[i].Refresh();
             }
+
+            if (header >= 2) { // since save file version 2
+                int unitCount = reader.ReadInt32();
+                for (int i = 0; i < unitCount; i++) {
+                    HexUnit.Load(reader, this);
+                }
+            }
         }
+
+        #region Path
+
+        public void FindPath(HexCell fromCell, HexCell toCell, int speed) {
+            ClearPath();
+            currentPathFrom = fromCell;
+            currentPathTo = toCell;
+            currentPathExists = Search(fromCell, toCell, speed);
+            ShowPath(speed);
+        }
+
+        bool Search(HexCell fromCell, HexCell toCell, int speed) {
+            searchFrontierPhase += 2;
+            if (searchFrontier == null) {
+                searchFrontier = new HexCellPriorityQueue();
+            }
+            else {
+                searchFrontier.Clear();
+            }
+            fromCell.SearchPhase = searchFrontierPhase;
+            fromCell.Distance = 0;
+            searchFrontier.Enqueue(fromCell);
+            while (searchFrontier.Count > 0) {
+                HexCell current = searchFrontier.Dequeue();
+                current.SearchPhase += 1;
+
+                // Stop when current cell is the destination
+                if (current == toCell) {
+                    return true;
+                }
+
+                int currentTurn = current.Distance / speed;
+
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+                    HexCell neighbor = current.GetNeighbor(d);
+                    // Conditions that make neighbor unreachable
+                    if (neighbor == null || neighbor.SearchPhase>searchFrontierPhase) {
+                        continue;
+                    }
+                    if (neighbor.IsUnderwater || neighbor.Unit) {
+                        continue;
+                    }
+                    HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                    if (edgeType == HexEdgeType.Cliff) {
+                        continue;
+                    }
+                    // Calculate movement cost based on features
+                    int moveCost;
+                    if (current.HasRoadThroughEdge(d)) {
+                        moveCost = 1;
+                    }
+                    else if (current.Walled != neighbor.Walled) {
+                        continue;
+                    }
+                    else {
+                        moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+                        moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+                    }
+
+                    int distance = current.Distance + moveCost;
+                    int turn = distance / speed;
+                    // If you need a new turn to reach the new cell, take wasted movement points into account
+                    if (turn > currentTurn) {
+                        distance = turn * speed + moveCost;
+                    }
+
+                    if (neighbor.SearchPhase < searchFrontierPhase) {
+                        neighbor.SearchPhase = searchFrontierPhase;
+                        neighbor.Distance = distance;
+                        neighbor.PathFrom = current;
+                        neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates); // Heuristic
+                        searchFrontier.Enqueue(neighbor);
+                    }
+                    else if (distance < neighbor.Distance) {
+                        int oldPriority = neighbor.SearchPriority;
+                        neighbor.Distance = distance;
+                        neighbor.PathFrom = current;
+                        searchFrontier.Change(neighbor, oldPriority);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        void ShowPath(int speed) {
+            if (currentPathExists) {
+                HexCell current = currentPathTo;
+                while (current != currentPathFrom) {
+                    int turn = current.Distance / speed;
+                    current.SetLabel(turn.ToString());
+                    current.EnableHighlight(Color.white);
+                    current = current.PathFrom;
+                }
+            }
+            currentPathFrom.EnableHighlight(Color.blue);
+            currentPathTo.EnableHighlight(Color.red);
+        }
+
+        public void ClearPath() {
+            if (currentPathExists) {
+                HexCell current = currentPathTo;
+                while (current != currentPathFrom) {
+                    current.SetLabel(null);
+                    current.DisableHighlight();
+                    current = current.PathFrom;
+                }
+                current.DisableHighlight();
+                currentPathExists = false;
+            }
+            else if (currentPathFrom) {
+                currentPathFrom.DisableHighlight();
+                currentPathTo.DisableHighlight();
+            }
+            currentPathFrom = currentPathTo = null;
+        }
+
+        #endregion
+
+        #region Units
+
+        void ClearUnits() {
+            for (int i = 0; i < units.Count; i++) {
+                units[i].Die();
+            }
+            units.Clear();
+        }
+
+        public void AddUnit(HexUnit unit, HexCell location, float orientation) {
+            units.Add(unit);
+            unit.transform.SetParent(transform, false);
+            unit.Location = location;
+            unit.Orientation = orientation;
+        }
+
+        public void RemoveUnit(HexUnit unit) {
+            units.Remove(unit);
+            unit.Die();
+        }
+
+        #endregion
     }
 
 }
